@@ -28,7 +28,7 @@ class _SignInViewState extends State<SignInView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login'),
+        title: const Text('Sign In'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -57,33 +57,49 @@ class _SignInViewState extends State<SignInView> {
                   },
                 ),
                 const SizedBox(height: 10),
-                TextInput(
-                  textEditingController: controller.textEddtingPassword,
-                  labelText: "Password",
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Required field';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 10),
-                Button(
-                  onPressed: () async {
-                    final user = await controller.login();
-
-                    if (user.name!.isNotEmpty) {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const ListTaskView(),
+                ValueListenableBuilder(
+                    valueListenable: controller.obscureText,
+                    builder: (context, obsure, _) {
+                      return TextInput(
+                        textEditingController: controller.textEddtingPassword,
+                        labelText: "Password",
+                        obscureText: obsure,
+                        suffixIcon: IconButton(
+                          onPressed: () => controller.togleOsbcureText(),
+                          icon: Icon(obsure == true
+                              ? Icons.visibility_off
+                              : Icons.visibility),
                         ),
-                        (route) => false,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Required field';
+                          }
+                          return null;
+                        },
                       );
-                    }
-                  },
-                  label: "Sign In",
-                ),
+                    }),
+                const SizedBox(height: 10),
+                ValueListenableBuilder(
+                    valueListenable: controller.loading,
+                    builder: (context, loading, _) {
+                      return Button(
+                        onPressed: () async {
+                          final user = await controller.login();
+
+                          if (user.name!.isNotEmpty) {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ListTaskView(),
+                              ),
+                              (route) => false,
+                            );
+                          }
+                        },
+                        label: "Sign In",
+                        loading: loading,
+                      );
+                    }),
               ],
             ),
           ),

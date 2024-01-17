@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:app_crud_ezoom/app/controllers/user_controller.dart';
 import 'package:app_crud_ezoom/app/services/user/user_services_imp.dart';
 import 'package:app_crud_ezoom/app/views/signInView/sign_in_view.dart';
@@ -67,30 +69,48 @@ class _SignUpViewState extends State<SignUpView> {
                   },
                 ),
                 const SizedBox(height: 10),
-                TextInput(
-                  textEditingController: controller.textEddtingPassword,
-                  labelText: "Password",
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Required field';
-                    }
-                    return null;
-                  },
-                ),
+                ValueListenableBuilder(
+                    valueListenable: controller.obscureText,
+                    builder: (context, obsure, _) {
+                      return TextInput(
+                        textEditingController: controller.textEddtingPassword,
+                        labelText: "Password",
+                        obscureText: obsure,
+                        suffixIcon: IconButton(
+                          onPressed: () => controller.togleOsbcureText(),
+                          icon: Icon(obsure == true
+                              ? Icons.visibility_off
+                              : Icons.visibility),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Required field';
+                          }
+                          return null;
+                        },
+                      );
+                    }),
                 const SizedBox(height: 10),
-                Button(
-                  onPressed: () async {
-                    await controller.createUser().then((value) {
-                      controller.clearTextEditing();
-                      return Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const SignInView(),
-                          ));
-                    });
-                  },
-                  label: "Sign Up",
-                ),
+                ValueListenableBuilder(
+                    valueListenable: controller.loading,
+                    builder: (context, loading, _) {
+                      return Button(
+                        onPressed: () async {
+                          if (controller.keySignUp.currentState!.validate()) {
+                            await controller.createUser();
+                            controller.clearTextEditing();
+
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const SignInView(),
+                                ));
+                          }
+                        },
+                        label: "Sign Up",
+                        loading: loading,
+                      );
+                    }),
                 const SizedBox(height: 10),
                 const Center(
                   child: TextWidget(

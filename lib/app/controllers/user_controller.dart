@@ -10,12 +10,16 @@ class UserController {
   final keySignUp = GlobalKey<FormState>();
   final keySignIn = GlobalKey<FormState>();
 
+  final obscureText = ValueNotifier<bool>(true);
+  final loading = ValueNotifier<bool>(false);
+
   final IUserService _servicesImp;
 
   UserController(this._servicesImp);
 
   Future<void> createUser() async {
-    if (keySignUp.currentState!.validate()) {
+    loading.value = true;
+    try {
       final userModel = UserModel(
         name: textEddtingName.text,
         email: textEddtingEmail.text,
@@ -23,11 +27,16 @@ class UserController {
       );
 
       await _servicesImp.create(userModel: userModel);
+      loading.value = false;
+    } catch (e) {
+      loading.value = false;
+      throw Exception(e.toString());
     }
   }
 
   Future<UserModel> login() async {
     late UserModel user;
+    loading.value = true;
     try {
       if (keySignIn.currentState!.validate()) {
         final userModel = UserModel(
@@ -37,10 +46,16 @@ class UserController {
 
         user = await _servicesImp.loginUser(userModel: userModel);
       }
+      loading.value = false;
       return user;
     } catch (e) {
+      loading.value = false;
       throw Exception(e.toString());
     }
+  }
+
+  togleOsbcureText() {
+    obscureText.value = !obscureText.value;
   }
 
   disposeTextEditing() {

@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 class Button extends StatelessWidget {
   final Function() onPressed;
   final String label;
-  const Button({super.key, required this.onPressed, required this.label});
+  final bool? loading;
+  const Button(
+      {super.key, required this.onPressed, required this.label, this.loading});
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +26,17 @@ class Button extends StatelessWidget {
       ),
       child: OutlinedButton(
         onPressed: onPressed,
-        child: TextWidget(
-          label: label,
-          color: Colors.black,
-          fontSize: 17,
-        ),
+        child: loading == true
+            ? const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.black,
+                ),
+              )
+            : TextWidget(
+                label: label,
+                color: Colors.black,
+                fontSize: 17,
+              ),
       ),
     );
   }
