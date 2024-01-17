@@ -1,4 +1,4 @@
-import 'package:app_crud_ezoom/app/views/home/home_view.dart';
+import 'package:app_crud_ezoom/app/views/splashView/splash_view.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         brightness: Brightness.dark,
       ),
-      home: HomeView(),
+      home: const SplashView(),
     );
   }
 }

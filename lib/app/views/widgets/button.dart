@@ -1,3 +1,4 @@
+import 'package:app_crud_ezoom/app/views/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 
 class Button extends StatelessWidget {
@@ -7,22 +8,26 @@ class Button extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.99,
-      height: 45,
-      child: OutlinedButton(
-        style: OutlinedButton.styleFrom(
-          backgroundColor: Colors.purple.shade100,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(7),
-          ),
+    return Container(
+      width: 370,
+      height: 60,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25),
+        gradient: const LinearGradient(
+          colors: [
+            Color.fromARGB(255, 190, 183, 204),
+            Color.fromARGB(255, 196, 188, 212)
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
+      ),
+      child: OutlinedButton(
         onPressed: onPressed,
-        child: Text(
-          label,
-          style: const TextStyle(
-            color: Colors.black,
-          ),
+        child: TextWidget(
+          label: label,
+          color: Colors.black,
+          fontSize: 17,
         ),
       ),
     );

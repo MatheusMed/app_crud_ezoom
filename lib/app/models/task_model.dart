@@ -4,13 +4,13 @@ import 'dart:convert';
 import 'package:app_crud_ezoom/app/models/user_model.dart';
 
 class TaskModel {
-  final int id;
+  final int? id;
   final String title;
   final String desc;
-  final DateTime createdAt;
-  final DateTime updateAt;
+  final DateTime? createdAt;
+  final DateTime? updateAt;
   final int userId;
-  final UserModel usuario;
+  final UserModel? usuario;
   TaskModel({
     required this.id,
     required this.title,
@@ -18,7 +18,7 @@ class TaskModel {
     required this.createdAt,
     required this.updateAt,
     required this.userId,
-    required this.usuario,
+    this.usuario,
   });
 
   Map<String, dynamic> toMap() {
@@ -26,22 +26,28 @@ class TaskModel {
       'id': id,
       'title': title,
       'desc': desc,
-      'createdAt': createdAt.millisecondsSinceEpoch,
-      'updateAt': updateAt.millisecondsSinceEpoch,
+      'createdAt': createdAt?.millisecondsSinceEpoch,
+      'updateAt': updateAt?.millisecondsSinceEpoch,
       'userId': userId,
-      'usuario': usuario.toMap(),
+      'usuario': usuario?.toMap(),
     };
   }
 
   factory TaskModel.fromMap(Map<String, dynamic> map) {
     return TaskModel(
-      id: map['id'] as int,
+      id: map['id'] != null ? map['id'] as int : null,
       title: map['title'] as String,
       desc: map['desc'] as String,
-      createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
-      updateAt: DateTime.fromMillisecondsSinceEpoch(map['updateAt'] as int),
+      createdAt: map['createdAt'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int)
+          : null,
+      updateAt: map['updateAt'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(map['updateAt'] as int)
+          : null,
       userId: map['userId'] as int,
-      usuario: UserModel.fromMap(map['usuario'] as Map<String, dynamic>),
+      usuario: map['usuario'] != null
+          ? UserModel.fromMap(map['usuario'] as Map<String, dynamic>)
+          : null,
     );
   }
 
@@ -77,5 +83,25 @@ class TaskModel {
         updateAt.hashCode ^
         userId.hashCode ^
         usuario.hashCode;
+  }
+
+  TaskModel copyWith({
+    int? id,
+    String? title,
+    String? desc,
+    DateTime? createdAt,
+    DateTime? updateAt,
+    int? userId,
+    UserModel? usuario,
+  }) {
+    return TaskModel(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      desc: desc ?? this.desc,
+      createdAt: createdAt ?? this.createdAt,
+      updateAt: updateAt ?? this.updateAt,
+      userId: userId ?? this.userId,
+      usuario: usuario ?? this.usuario,
+    );
   }
 }
