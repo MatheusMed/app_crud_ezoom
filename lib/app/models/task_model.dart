@@ -1,24 +1,17 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:app_crud_ezoom/app/models/user_model.dart';
-
 class TaskModel {
   final int? id;
   final String title;
   final String desc;
-  final DateTime? createdAt;
-  final DateTime? updateAt;
-  final int userId;
-  final UserModel? usuario;
+  final int? userId;
+
   TaskModel({
-    required this.id,
+    this.id,
     required this.title,
     required this.desc,
-    required this.createdAt,
-    required this.updateAt,
-    required this.userId,
-    this.usuario,
+    this.userId,
   });
 
   Map<String, dynamic> toMap() {
@@ -26,10 +19,7 @@ class TaskModel {
       'id': id,
       'title': title,
       'desc': desc,
-      'createdAt': createdAt?.millisecondsSinceEpoch,
-      'updateAt': updateAt?.millisecondsSinceEpoch,
       'userId': userId,
-      'usuario': usuario?.toMap(),
     };
   }
 
@@ -38,16 +28,7 @@ class TaskModel {
       id: map['id'] != null ? map['id'] as int : null,
       title: map['title'] as String,
       desc: map['desc'] as String,
-      createdAt: map['createdAt'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int)
-          : null,
-      updateAt: map['updateAt'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['updateAt'] as int)
-          : null,
-      userId: map['userId'] as int,
-      usuario: map['usuario'] != null
-          ? UserModel.fromMap(map['usuario'] as Map<String, dynamic>)
-          : null,
+      userId: map['userId'] != null ? map['userId'] as int : null,
     );
   }
 
@@ -58,7 +39,21 @@ class TaskModel {
 
   @override
   String toString() {
-    return 'TaskModel(id: $id, title: $title, desc: $desc, createdAt: $createdAt, updateAt: $updateAt, userId: $userId, usuario: $usuario)';
+    return 'TaskModel(id: $id, title: $title, desc: $desc, userId: $userId)';
+  }
+
+  TaskModel copyWith({
+    int? id,
+    String? title,
+    String? desc,
+    int? userId,
+  }) {
+    return TaskModel(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      desc: desc ?? this.desc,
+      userId: userId ?? this.userId,
+    );
   }
 
   @override
@@ -68,40 +63,11 @@ class TaskModel {
     return other.id == id &&
         other.title == title &&
         other.desc == desc &&
-        other.createdAt == createdAt &&
-        other.updateAt == updateAt &&
-        other.userId == userId &&
-        other.usuario == usuario;
+        other.userId == userId;
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^
-        title.hashCode ^
-        desc.hashCode ^
-        createdAt.hashCode ^
-        updateAt.hashCode ^
-        userId.hashCode ^
-        usuario.hashCode;
-  }
-
-  TaskModel copyWith({
-    int? id,
-    String? title,
-    String? desc,
-    DateTime? createdAt,
-    DateTime? updateAt,
-    int? userId,
-    UserModel? usuario,
-  }) {
-    return TaskModel(
-      id: id ?? this.id,
-      title: title ?? this.title,
-      desc: desc ?? this.desc,
-      createdAt: createdAt ?? this.createdAt,
-      updateAt: updateAt ?? this.updateAt,
-      userId: userId ?? this.userId,
-      usuario: usuario ?? this.usuario,
-    );
+    return id.hashCode ^ title.hashCode ^ desc.hashCode ^ userId.hashCode;
   }
 }

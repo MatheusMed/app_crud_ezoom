@@ -32,43 +32,60 @@ class _SignInViewState extends State<SignInView> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Center(
-          child: ListView(
-            children: [
-              SizedBox(
-                height: 100,
-                width: 200,
-                child: Image.asset(
-                  "assets/icons/online-registration.png",
-                  color: Colors.white,
+        child: Form(
+          key: controller.keySignIn,
+          child: Center(
+            child: ListView(
+              children: [
+                SizedBox(
+                  height: 100,
+                  width: 200,
+                  child: Image.asset(
+                    "assets/icons/online-registration.png",
+                    color: Colors.white,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 10),
-              TextInput(
-                textEditingController: controller.textEddtingEmail,
-                labelText: "Email",
-              ),
-              const SizedBox(height: 10),
-              TextInput(
-                textEditingController: controller.textEddtingPassword,
-                labelText: "Password",
-              ),
-              const SizedBox(height: 10),
-              Button(
-                onPressed: () async {
-                  final user = await controller.login();
+                const SizedBox(height: 10),
+                TextInput(
+                  textEditingController: controller.textEddtingEmail,
+                  labelText: "Email",
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Required field';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 10),
+                TextInput(
+                  textEditingController: controller.textEddtingPassword,
+                  labelText: "Password",
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Required field';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 10),
+                Button(
+                  onPressed: () async {
+                    final user = await controller.login();
 
-                  if (user.name!.isNotEmpty) {
-                    Navigator.pushReplacement(
+                    if (user.name!.isNotEmpty) {
+                      Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
                           builder: (context) => const ListTaskView(),
-                        ));
-                  }
-                },
-                label: "Login",
-              ),
-            ],
+                        ),
+                        (route) => false,
+                      );
+                    }
+                  },
+                  label: "Sign In",
+                ),
+              ],
+            ),
           ),
         ),
       ),

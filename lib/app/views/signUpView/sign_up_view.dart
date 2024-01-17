@@ -33,7 +33,7 @@ class _SignUpViewState extends State<SignUpView> {
         padding: const EdgeInsets.all(8.0),
         child: Center(
           child: Form(
-            key: controller.keySingUp,
+            key: controller.keySignUp,
             child: ListView(
               children: [
                 SizedBox(

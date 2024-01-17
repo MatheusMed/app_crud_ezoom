@@ -7,14 +7,15 @@ class UserController {
   final textEddtingPassword = TextEditingController();
   final textEddtingEmail = TextEditingController();
 
-  final keySingUp = GlobalKey<FormState>();
+  final keySignUp = GlobalKey<FormState>();
+  final keySignIn = GlobalKey<FormState>();
 
   final IUserService _servicesImp;
 
   UserController(this._servicesImp);
 
   Future<void> createUser() async {
-    if (keySingUp.currentState!.validate()) {
+    if (keySignUp.currentState!.validate()) {
       final userModel = UserModel(
         name: textEddtingName.text,
         email: textEddtingEmail.text,
@@ -28,7 +29,7 @@ class UserController {
   Future<UserModel> login() async {
     late UserModel user;
     try {
-      if (keySingUp.currentState!.validate()) {
+      if (keySignIn.currentState!.validate()) {
         final userModel = UserModel(
           email: textEddtingEmail.text,
           password: textEddtingPassword.text,
